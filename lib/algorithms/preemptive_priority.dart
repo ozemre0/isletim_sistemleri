@@ -1,4 +1,5 @@
 import '../models/process.dart';
+import '../utils/statistics_calculator.dart';
 
 class PreemptivePriority {
   static const double contextSwitchTime = 0.001;
@@ -11,12 +12,10 @@ class PreemptivePriority {
     int contextSwitches = 0;
 
     while (processCopies.any((p) => p.remainingTime > 0)) {
-      // hazır olan processleri bul
       final availableProcesses = processCopies
           .where((p) => p.arrivalTime <= currentTime && p.remainingTime > 0)
           .toList();
 
-      // hiç process yoksa bekle
       if (availableProcesses.isEmpty) {
         final nextArrival = processCopies
             .where((p) => p.remainingTime > 0)
@@ -41,7 +40,6 @@ class PreemptivePriority {
         continue;
       }
 
-      // en yüksek öncelikli olanı seç (düşük sayı = yüksek öncelik)
       availableProcesses.sort((a, b) {
         final priorityCompare = a.getPriorityValue().compareTo(b.getPriorityValue());
         if (priorityCompare != 0) return priorityCompare;
@@ -50,7 +48,6 @@ class PreemptivePriority {
 
       final selectedProcess = availableProcesses.first;
 
-      // context switch kontrolü
       if (timeTable.isNotEmpty && 
           timeTable.last.processId != 'IDLE' && 
           timeTable.last.processId != selectedProcess.id) {
@@ -61,13 +58,10 @@ class PreemptivePriority {
         selectedProcess.startTime = currentTime;
       }
 
-      // 1 birim çalıştır (preemptive)
       final executionTime = 1;
       final previousTime = currentTime;
       currentTime += executionTime;
       selectedProcess.remainingTime -= executionTime;
-
-      // zaman tablosunu güncelle
       if (timeTable.isNotEmpty && 
           timeTable.last.processId == selectedProcess.id &&
           timeTable.last.endTime == previousTime) {
@@ -93,43 +87,13 @@ class PreemptivePriority {
       }
     }
 
-    final maxWaitingTime = completedProcesses
-        .map((p) => p.waitingTime.toDouble())
-        .reduce((a, b) => a > b ? a : b);
-    final avgWaitingTime = completedProcesses
-        .map((p) => p.waitingTime.toDouble())
-        .reduce((a, b) => a + b) / completedProcesses.length;
-    
-    final maxTurnaroundTime = completedProcesses
-        .map((p) => p.turnaroundTime.toDouble())
-        .reduce((a, b) => a > b ? a : b);
-    final avgTurnaroundTime = completedProcesses
-        .map((p) => p.turnaroundTime.toDouble())
-        .reduce((a, b) => a + b) / completedProcesses.length;
-
-    final Map<int, int> throughput = {};
-    for (final t in [50, 100, 150, 200]) {
-      throughput[t] = completedProcesses
-          .where((p) => p.finishTime <= t)
-          .length;
-    }
-
-    final totalCpuTime = processes
-        .map((p) => p.cpuBurstTime.toDouble())
-        .reduce((a, b) => a + b);
-    final totalTime = currentTime.toDouble();
-    final totalContextSwitchOverhead = contextSwitches * contextSwitchTime;
-    final avgCpuEfficiency = totalCpuTime / (totalTime + totalContextSwitchOverhead);
-
-    return AlgorithmResult(
+    return StatisticsCalculator.calculateResult(
       timeTable: timeTable,
-      maxWaitingTime: maxWaitingTime,
-      avgWaitingTime: avgWaitingTime,
-      maxTurnaroundTime: maxTurnaroundTime,
-      avgTurnaroundTime: avgTurnaroundTime,
-      throughput: throughput,
-      avgCpuEfficiency: avgCpuEfficiency,
-      totalContextSwitches: contextSwitches,
+      completedProcesses: completedProcesses,
+      originalProcesses: processes,
+      currentTime: currentTime,
+      contextSwitches: contextSwitches,
+      contextSwitchTime: contextSwitchTime,
     );
   }
 }

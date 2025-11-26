@@ -35,7 +35,7 @@ class CsvReader {
           );
           processes.add(process);
         } catch (e) {
-        
+          // skip invalid lines
           continue;
         }
       }

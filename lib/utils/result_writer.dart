@@ -9,9 +9,7 @@ class ResultWriter {
     AlgorithmResult result,
     List<Process> processes,
   ) async {
-    // Web platform doesn't support file writing
-    // Use download functionality in main.dart instead
-    // This function is kept for API compatibility but does nothing
+
   }
 
   static String formatResultAsString(

@@ -1,28 +1,29 @@
 import '../models/process.dart';
+import '../utils/statistics_calculator.dart';
 
 class RoundRobin {
   static const double contextSwitchTime = 0.001;
-  static const int quantum = 2; // zaman dilimi
+  static const int quantum = 2;
 
   static AlgorithmResult schedule(List<Process> processes) {
     final List<Process> processCopies = processes.map((p) => p.copy()).toList();
     final List<TimeSlot> timeTable = [];
     final List<Process> completedProcesses = [];
     final List<Process> readyQueue = [];
+    final Set<Process> inQueue = {};
     int currentTime = 0;
     int contextSwitches = 0;
 
     while (processCopies.any((p) => p.remainingTime > 0) || readyQueue.isNotEmpty) {
-      // yeni gelen processleri kuyruğa ekle
       for (final process in processCopies) {
         if (process.arrivalTime <= currentTime && 
             process.remainingTime > 0 && 
-            !readyQueue.contains(process)) {
+            !inQueue.contains(process)) {
           readyQueue.add(process);
+          inQueue.add(process);
         }
       }
 
-      // kuyruk boşsa bekliyoruzz
       if (readyQueue.isEmpty) {
         final nextArrival = processCopies
             .where((p) => p.remainingTime > 0)
@@ -47,10 +48,9 @@ class RoundRobin {
         continue;
       }
 
-      // kuyruktan ilk process'i al
       final selectedProcess = readyQueue.removeAt(0);
+      inQueue.remove(selectedProcess);
 
-      // context switch var mı bak
       if (timeTable.isNotEmpty && 
           timeTable.last.processId != 'IDLE' && 
           timeTable.last.processId != selectedProcess.id) {
@@ -61,7 +61,6 @@ class RoundRobin {
         selectedProcess.startTime = currentTime;
       }
 
-       //kalan süre kadar çalıştır
       final executionTime = selectedProcess.remainingTime < quantum 
           ? selectedProcess.remainingTime 
           : quantum;
@@ -69,8 +68,6 @@ class RoundRobin {
       final previousTime = currentTime;
       currentTime += executionTime;
       selectedProcess.remainingTime -= executionTime;
-
-      // zaman tablosunu güncelle
       if (timeTable.isNotEmpty && 
           timeTable.last.processId == selectedProcess.id &&
           timeTable.last.endTime == previousTime) {
@@ -88,17 +85,16 @@ class RoundRobin {
         ));
       }
 
-      // çalışma sırasında gelen processleri  ekle
       for (final process in processCopies) {
         if (process.arrivalTime > previousTime && 
             process.arrivalTime <= currentTime && 
             process.remainingTime > 0 && 
-            !readyQueue.contains(process)) {
+            !inQueue.contains(process)) {
           readyQueue.add(process);
+          inQueue.add(process);
         }
       }
 
-      //process bittiyse tamamlananlara ekle, değilse kuyruğa geri koy
       if (selectedProcess.remainingTime == 0) {
         selectedProcess.finishTime = currentTime;
         selectedProcess.turnaroundTime = selectedProcess.finishTime - selectedProcess.arrivalTime;
@@ -106,46 +102,17 @@ class RoundRobin {
         completedProcesses.add(selectedProcess);
       } else {
         readyQueue.add(selectedProcess);
+        inQueue.add(selectedProcess);
       }
     }
 
-    final maxWaitingTime = completedProcesses
-        .map((p) => p.waitingTime.toDouble())
-        .reduce((a, b) => a > b ? a : b);
-    final avgWaitingTime = completedProcesses
-        .map((p) => p.waitingTime.toDouble())
-        .reduce((a, b) => a + b) / completedProcesses.length;
-    
-    final maxTurnaroundTime = completedProcesses
-        .map((p) => p.turnaroundTime.toDouble())
-        .reduce((a, b) => a > b ? a : b);
-    final avgTurnaroundTime = completedProcesses
-        .map((p) => p.turnaroundTime.toDouble())
-        .reduce((a, b) => a + b) / completedProcesses.length;
-
-    final Map<int, int> throughput = {};
-    for (final t in [50, 100, 150, 200]) {
-      throughput[t] = completedProcesses
-          .where((p) => p.finishTime <= t)
-          .length;
-    }
-
-    final totalCpuTime = processes
-        .map((p) => p.cpuBurstTime.toDouble())
-        .reduce((a, b) => a + b);
-    final totalTime = currentTime.toDouble();
-    final totalContextSwitchOverhead = contextSwitches * contextSwitchTime;
-    final avgCpuEfficiency = totalCpuTime / (totalTime + totalContextSwitchOverhead);
-
-    return AlgorithmResult(
+    return StatisticsCalculator.calculateResult(
       timeTable: timeTable,
-      maxWaitingTime: maxWaitingTime,
-      avgWaitingTime: avgWaitingTime,
-      maxTurnaroundTime: maxTurnaroundTime,
-      avgTurnaroundTime: avgTurnaroundTime,
-      throughput: throughput,
-      avgCpuEfficiency: avgCpuEfficiency,
-      totalContextSwitches: contextSwitches,
+      completedProcesses: completedProcesses,
+      originalProcesses: processes,
+      currentTime: currentTime,
+      contextSwitches: contextSwitches,
+      contextSwitchTime: contextSwitchTime,
     );
   }
 }
