@@ -6,7 +6,7 @@ Bu proje, işlem zamanlama algoritmalarını (FCFS, SJF, Öncelik vb.) görselle
 - Gerekirse `flutter doctor` ile eksik araçları tamamlayın.
 - Kodda yer alan örnek veri dosyaları `assets/odev1_case*.txt` altında. Uygulamada CSV yükleme/sonuç alma bölümleri bunları kullanıyor.
 - Flutter nasıl kurulacağını anlatan video (14dakika) : https://www.youtube.com/watch?v=VFDbZk2xhO4
-- GitHub Pages üzerinde yayınlandı, kodu çalıştırmadan bakmak isterseniz; doğrudan web üzerinden çalışmasını görebilirsiniz. Kodların ana kısmı `lib/` klasöründe.
+- GitHub Pages üzerinde yayınlandı, kodu çalıştırmadan bakmak isterseniz doğrudan web üzerinden çalışan halini görebilirsiniz böylece flutter kurmanıza gerek yok çalıştırmak için. Kodların ana kısmı (algoritmalar...) `lib/` klasöründe.
 - https://ozemre0.github.io/isletim_sistemleri/  (github pages linki)
 
 ## Gereksinimler
