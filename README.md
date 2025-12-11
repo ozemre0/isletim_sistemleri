@@ -1,16 +1,34 @@
 # isletim_sistemleri_odev
 
-A new Flutter project.
+Bu proje, işlem zamanlama algoritmalarını (FCFS, SJF, Öncelik vb.) görselleştiren bir Flutter uygulamasıdır. Aşağıdaki adımları izleyerek çalıştırabilirsiniz.
 
-## Getting Started
+## Notlar
+- Gerekirse `flutter doctor` ile eksik araçları tamamlayın.
+- Kodda yer alan örnek veri dosyaları `assets/odev1_case*.txt` altında. Uygulamada CSV yükleme/sonuç alma bölümleri bunları kullanıyor.
+- Flutter nasıl kurulacağını anlatan video(14dakika) : https://www.youtube.com/watch?v=VFDbZk2xhO4
+- GitHub Pages üzerinde yayınlandı, kodu çalıştırmadan bakmak isterseniz; doğrudan web üzerinden çalışmasını görebilirsiniz. Kodların ana kısmı `lib/` klasöründe.
+- 
+## Gereksinimler
+- Flutter SDK (3.x önerilir) kurulu olmalı.
+- `flutter doctor` çıktısında eksik bileşen olmaması (Android Studio ya da VS Code eklentileri, emulator/simulator, Chrome).
 
-This project is a starting point for a Flutter application.
+## Kurulum ve Çalıştırma
+1. Bağımlılıkları indirin:
+   ```bash
+   flutter pub get
+   ```
+2. Mobil (Android/iOS) için bir cihaz ya da emulator açın, ardından:
+   ```bash
+   flutter run
+   ```
+3. Web için (Chrome):
+   ```bash
+   flutter run -d chrome
+   ```
 
-A few resources to get you started if this is your first Flutter project:
+## Flutter nasıl kurulur? (özet)
+- **İndir**: https://docs.flutter.dev/get-started/install adresinden işletim sistemini seçip SDK’yı indirin.
+- **PATH ekleyin**: SDK içindeki `flutter/bin` klasörünü sistem PATH’ine ekleyin.
+- **Bileşenler**: Android Studio (SDK/Platform Tools) ya da VS Code + Flutter/Dart eklentileri. iOS için Xcode (macOS).
+- **Kontrol**: Terminalde `flutter doctor` çalıştırın; eksik görünen bileşenleri tamamlayın.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
