@@ -21,6 +21,7 @@ class RoundRobin {
             !inQueue.contains(process)) {
           readyQueue.add(process);
           inQueue.add(process);
+          // burada kuyruğa düşsün diye böyle ekledim- muhammet emre öz
         }
       }
 
@@ -55,6 +56,7 @@ class RoundRobin {
           timeTable.last.processId != 'IDLE' && 
           timeTable.last.processId != selectedProcess.id) {
         contextSwitches++;
+        // bu context switch sayacı
       }
 
       if (selectedProcess.startTime == -1) {
@@ -84,6 +86,7 @@ class RoundRobin {
           processId: selectedProcess.id,
         ));
       }
+      // quantum bitince yine sıraya koyuyorum, döngü dönsün diye böyle - muhammet emre öz
 
       for (final process in processCopies) {
         if (process.arrivalTime > previousTime && 

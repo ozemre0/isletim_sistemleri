@@ -44,6 +44,7 @@ class NonPreemptiveSJF {
           ));
         }
         currentTime = nextArrival;
+        // idle bırakınca vakit akıyor, beklesin diye bu şekilde - muhammet emre öz
         continue;
       }
 
@@ -55,6 +56,7 @@ class NonPreemptiveSJF {
 
       final selectedProcess = readyQueue.removeAt(0);
       inQueue.remove(selectedProcess);
+      // en kısa işi seçiyorum, sırayı bozmayayım
 
       if (timeTable.isNotEmpty && 
           timeTable.last.processId != 'IDLE' && 
@@ -75,6 +77,7 @@ class NonPreemptiveSJF {
       selectedProcess.turnaroundTime = selectedProcess.finishTime - selectedProcess.arrivalTime;
       selectedProcess.waitingTime = selectedProcess.turnaroundTime - selectedProcess.cpuBurstTime;
       completedProcesses.add(selectedProcess);
+      // bitişte hesapları yazalım
     }
 
     return StatisticsCalculator.calculateResult(

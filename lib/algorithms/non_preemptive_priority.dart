@@ -44,6 +44,7 @@ class NonPreemptivePriority {
           ));
         }
         currentTime = nextArrival;
+        // burada boş beklettim, çizelge uzasın ama akış bozulmasın - muhammet emre öz
         continue;
       }
 
@@ -75,6 +76,7 @@ class NonPreemptivePriority {
       selectedProcess.turnaroundTime = selectedProcess.finishTime - selectedProcess.arrivalTime;
       selectedProcess.waitingTime = selectedProcess.turnaroundTime - selectedProcess.cpuBurstTime;
       completedProcesses.add(selectedProcess);
+      // biten süreci kaydettim- muhammet emre öz
     }
 
     return StatisticsCalculator.calculateResult(

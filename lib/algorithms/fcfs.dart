@@ -30,6 +30,7 @@ class FCFS {
           ));
         }
         currentTime = process.arrivalTime;
+  
       }
 
       if (timeTable.isNotEmpty && timeTable.last.processId != 'IDLE') {
@@ -37,6 +38,7 @@ class FCFS {
       }
 
       process.startTime = currentTime;
+      // sıra geldi mi bekletmedim, direkt başlatıyorum böyle
       timeTable.add(TimeSlot(
         startTime: currentTime,
         endTime: currentTime + process.cpuBurstTime,
@@ -49,6 +51,7 @@ class FCFS {
       process.waitingTime = process.turnaroundTime - process.cpuBurstTime;
       
       completedProcesses.add(process);
+      // bitince süreleri hesapladım, biraz hesap defteri gibi oldu
     }
 
     return StatisticsCalculator.calculateResult(

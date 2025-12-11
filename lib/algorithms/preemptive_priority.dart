@@ -47,15 +47,18 @@ class PreemptivePriority {
       });
 
       final selectedProcess = availableProcesses.first;
+      // önceliği böyle kıyasladım, iş görüyor
 
       if (timeTable.isNotEmpty && 
           timeTable.last.processId != 'IDLE' && 
           timeTable.last.processId != selectedProcess.id) {
         contextSwitches++;
+        // sık sık kesince sayaç şişiyor, ama öncelik böyle çalışsın dedim - muhammet emre öz
       }
 
       if (selectedProcess.startTime == -1) {
         selectedProcess.startTime = currentTime;
+        // ilk defa koştu mu diye bakıp zamanını yazdım, aklım karışmasın
       }
 
       final executionTime = 1;

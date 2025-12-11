@@ -37,6 +37,7 @@ class PreemptiveSJF {
           ));
         }
         currentTime = nextArrival;
+        // burada boşluğu bırakıyorum, akış dursun, çizelge uzasın diye
         continue;
       }
 
@@ -47,6 +48,7 @@ class PreemptiveSJF {
       });
 
       final selectedProcess = availableProcesses.first;
+      // en kısa kalan zamanı alıyorum- muhammet emre öz
 
       if (timeTable.isNotEmpty && 
           timeTable.last.processId != 'IDLE' && 
@@ -56,6 +58,7 @@ class PreemptiveSJF {
 
       if (selectedProcess.startTime == -1) {
         selectedProcess.startTime = currentTime;
+        // ilk kez çalıştıysa not düşüyorum, kaybolmasın - muhammet emre öz
       }
 
       final executionTime = 1;
