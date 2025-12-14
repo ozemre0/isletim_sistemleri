@@ -8,6 +8,7 @@ Bu proje, işlem zamanlama algoritmalarını (FCFS, SJF, Öncelik vb.) görselle
 - Flutter nasıl kurulacağını anlatan video (14dakika) : https://www.youtube.com/watch?v=VFDbZk2xhO4
 - GitHub Pages üzerinde yayınlandı, kodu çalıştırmadan bakmak isterseniz doğrudan web üzerinden çalışan halini görebilirsiniz böylece flutter kurmanıza gerek yok projenin çıktısını görebilmek için. Kodların ana kısmı (algoritmalar...) `lib/` klasöründe.
 - https://ozemre0.github.io/isletim_sistemleri/  (github pages linki)
+- web dosyalarını ben yazmadım , benim yazdığım kodlar lib içindeki dart kodlarıdır. Flutter in cross platform özelliği sayesinde web e deploy ettim. Web kodlarıni ben web e build ederken oluşturuldu.
 
 ## Gereksinimler
 - Flutter SDK (3.x önerilir) kurulu olmalı.
